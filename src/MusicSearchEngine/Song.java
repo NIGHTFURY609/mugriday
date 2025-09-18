@@ -17,7 +17,6 @@ public class Song {
         this.releaseYear = releaseYear;
     }
 
-    // --- Getters for all fields ---
     public int getId() { return id; }
     public String getTitle() { return title; }
     public String getArtist() { return artist; }

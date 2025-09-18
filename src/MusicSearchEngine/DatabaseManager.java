@@ -6,15 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseManager {
-    // --- IMPORTANT: UPDATE THESE WITH YOUR MYSQL DETAILS ---
     private static final String DB_URL = "jdbc:mysql://localhost:3306/musicband_db";
     private static final String USER = "root"; // Your MySQL username
     private static final String PASS = ""; // Your MySQL password
 
-    /**
-     * Searches for songs based on given criteria.
-     * Any criteria that is null or empty will be ignored.
-     */
     public List<Song> searchSongs(String title, String artist, String genre) {
         List<Song> songs = new ArrayList<>();
         
