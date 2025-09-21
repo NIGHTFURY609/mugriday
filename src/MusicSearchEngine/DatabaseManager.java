@@ -7,8 +7,8 @@ import java.util.List;
 
 public class DatabaseManager {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/musicband_db";
-    private static final String USER = "root"; // Your MySQL username
-    private static final String PASS = ""; // Your MySQL password
+    private static final String USER = "root";
+    private static final String PASS = "";
 
     public List<Song> searchSongs(String title, String artist, String genre) {
         List<Song> songs = new ArrayList<>();

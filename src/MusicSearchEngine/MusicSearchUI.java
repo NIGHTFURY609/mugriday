@@ -1,6 +1,4 @@
 package MusicSearchEngine;
-
-// File: MusicSearchUI.java
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
