@@ -1,9 +1,11 @@
 package MusicSearchEngine;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 import javax.swing.table.*;
@@ -93,7 +95,7 @@ public class MusicSearchUI extends JFrame {
         
         JLabel libraryLabel = new JLabel("Your Library");
         libraryLabel.setForeground(TEXT_PRIMARY);
-        libraryLabel.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        libraryLabel.setFont(new Font("Segoe UI Symbol", Font.BOLD, 16));
         sidebar.add(libraryLabel);
         
         sidebar.add(Box.createVerticalStrut(20));
@@ -116,7 +118,7 @@ public class MusicSearchUI extends JFrame {
         JButton btn = new JButton(text);
         btn.setForeground(TEXT_SECONDARY);
         btn.setBackground(BG_SECONDARY);
-        btn.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        btn.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
         btn.setBorderPainted(false);
         btn.setFocusPainted(false);
         btn.setContentAreaFilled(false);
@@ -145,7 +147,7 @@ public class MusicSearchUI extends JFrame {
     JButton homeButton = new JButton("🏠 Home");
     homeButton.setForeground(TEXT_SECONDARY);
     homeButton.setBackground(BG_PRIMARY);
-    homeButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
+    homeButton.setFont(new Font("Segoe UI Symbol", Font.BOLD, 14));
     homeButton.setBorder(new EmptyBorder(10, 15, 10, 15));
     homeButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
     homeButton.setFocusPainted(false);
@@ -169,7 +171,7 @@ public class MusicSearchUI extends JFrame {
     // --- END: New Home Button ---
 
     searchField = new JTextField("What do you want to play?");
-    searchField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+    searchField.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
     searchField.setForeground(TEXT_SECONDARY);
     searchField.setBackground(new Color(33, 33, 33));
     searchField.setCaretColor(TEXT_PRIMARY);
@@ -206,7 +208,7 @@ public class MusicSearchUI extends JFrame {
         
         JLabel queueLabel = new JLabel("Queue");
         queueLabel.setForeground(TEXT_PRIMARY);
-        queueLabel.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        queueLabel.setFont(new Font("Segoe UI Symbol", Font.BOLD, 16));
         queueLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         panel.add(queueLabel);
         
@@ -214,7 +216,7 @@ public class MusicSearchUI extends JFrame {
         
         JLabel nowPlayingHeader = new JLabel("Now Playing");
         nowPlayingHeader.setForeground(TEXT_SECONDARY);
-        nowPlayingHeader.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        nowPlayingHeader.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 12));
         nowPlayingHeader.setAlignmentX(Component.LEFT_ALIGNMENT);
         panel.add(nowPlayingHeader);
         
@@ -236,7 +238,7 @@ public class MusicSearchUI extends JFrame {
         
         nowPlayingLabel = new JLabel("No song playing");
         nowPlayingLabel.setForeground(TEXT_PRIMARY);
-        nowPlayingLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        nowPlayingLabel.setFont(new Font("Segoe UI Symbol", Font.BOLD, 14));
         nowPlayingPanel.add(nowPlayingLabel);
         
         // Center - Controls
@@ -258,25 +260,51 @@ public class MusicSearchUI extends JFrame {
     }
     
     private JButton createControlButton(String text) {
-        JButton btn = new JButton(text);
-        btn.setForeground(TEXT_PRIMARY);
-        btn.setBackground(BG_HOVER);
-        btn.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-        btn.setBorderPainted(false);
-        btn.setFocusPainted(false);
-        btn.setPreferredSize(new Dimension(40, 40));
-        
-        btn.addMouseListener(new MouseAdapter() {
-            public void mouseEntered(MouseEvent e) {
-                btn.setBackground(ACCENT_GREEN);
-            }
-            public void mouseExited(MouseEvent e) {
-                btn.setBackground(BG_HOVER);
-            }
-        });
-        
-        return btn;
+    JButton btn = new JButton();
+    btn.setForeground(TEXT_PRIMARY);
+    btn.setBackground(BG_HOVER);
+    btn.setBorderPainted(false);
+    btn.setFocusPainted(false);
+    btn.setPreferredSize(new Dimension(40, 40));
+
+    String iconName = "";
+    switch (text) {
+        case "▶":
+            iconName = "play.png";
+            break;
+        case "⏮":
+            iconName = "previous.png";
+            break;
+        case "⏭":
+            iconName = "next.png";
+            break;
     }
+
+    if (!iconName.isEmpty()) {
+        try {
+            // This assumes you have a folder named 'icons' in your project's source path (e.g., src/icons/play.png)
+            Image icon = ImageIO.read(getClass().getResource("/icons/" + iconName));
+            // This resizes the icon to look clean inside the button
+            btn.setIcon(new ImageIcon(icon.getScaledInstance(18, 18, Image.SCALE_SMOOTH)));
+        } catch (Exception e) {
+            // If the icon can't be found, it will fall back to showing the text symbol
+            System.err.println("Icon not found: " + iconName);
+            btn.setText(text);
+            btn.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 18));
+        }
+    }
+
+    btn.addMouseListener(new MouseAdapter() {
+        public void mouseEntered(MouseEvent e) {
+            btn.setBackground(ACCENT_GREEN);
+        }
+        public void mouseExited(MouseEvent e) {
+            btn.setBackground(BG_HOVER);
+        }
+    });
+
+    return btn;
+}
     
     private void loadRecentActivity() {
         mainContentPanel.removeAll();
@@ -300,12 +328,12 @@ public class MusicSearchUI extends JFrame {
         
         JLabel titleLabel = new JLabel(title);
         titleLabel.setForeground(TEXT_PRIMARY);
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        titleLabel.setFont(new Font("Segoe UI Symbol", Font.BOLD, 24));
         titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         
         JLabel subtitleLabel = new JLabel(subtitle);
         subtitleLabel.setForeground(TEXT_SECONDARY);
-        subtitleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        subtitleLabel.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 14));
         subtitleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         
         sectionPanel.add(titleLabel);
@@ -318,7 +346,7 @@ public class MusicSearchUI extends JFrame {
         cardsPanel.setBackground(BG_PRIMARY);
         cardsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 7; i++) {
             cardsPanel.add(createPlaylistCard());
         }
         
@@ -335,7 +363,7 @@ public class MusicSearchUI extends JFrame {
         
         JLabel coverLabel = new JLabel("♫");
         coverLabel.setForeground(ACCENT_GREEN);
-        coverLabel.setFont(new Font("Segoe UI", Font.BOLD, 60));
+        coverLabel.setFont(new Font("Segoe UI Symbol", Font.BOLD, 60));
         coverLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         
         card.add(coverLabel);
@@ -359,7 +387,7 @@ public class MusicSearchUI extends JFrame {
         
         JLabel resultsLabel = new JLabel("Search Results for: " + query);
         resultsLabel.setForeground(TEXT_PRIMARY);
-        resultsLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        resultsLabel.setFont(new Font("Segoe UI Symbol", Font.BOLD, 24));
         resultsLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         resultsPanel.add(resultsLabel);
         resultsPanel.add(Box.createVerticalStrut(20));
@@ -370,7 +398,7 @@ public class MusicSearchUI extends JFrame {
         if (!localSongs.isEmpty()) {
             JLabel localLabel = new JLabel("Local Library");
             localLabel.setForeground(ACCENT_GREEN);
-            localLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
+            localLabel.setFont(new Font("Segoe UI Symbol", Font.BOLD, 18));
             localLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
             resultsPanel.add(localLabel);
             resultsPanel.add(Box.createVerticalStrut(10));
@@ -384,7 +412,7 @@ public class MusicSearchUI extends JFrame {
         // Show external recommendations
         JLabel externalLabel = new JLabel("Not in Library? Try these:");
         externalLabel.setForeground(TEXT_PRIMARY);
-        externalLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        externalLabel.setFont(new Font("Segoe UI Symbol", Font.BOLD, 18));
         externalLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         resultsPanel.add(externalLabel);
         resultsPanel.add(Box.createVerticalStrut(10));
@@ -392,7 +420,7 @@ public class MusicSearchUI extends JFrame {
         // Torrent search results
         JLabel torrentLabel = new JLabel("Download via Torrent");
         torrentLabel.setForeground(TEXT_SECONDARY);
-        torrentLabel.setFont(new Font("Segoe UI", Font.ITALIC, 14));
+        torrentLabel.setFont(new Font("Segoe UI Symbol", Font.ITALIC, 14));
         torrentLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         resultsPanel.add(torrentLabel);
         resultsPanel.add(Box.createVerticalStrut(5));
@@ -407,7 +435,7 @@ public class MusicSearchUI extends JFrame {
         // External links
         JLabel streamLabel = new JLabel("Stream Online");
         streamLabel.setForeground(TEXT_SECONDARY);
-        streamLabel.setFont(new Font("Segoe UI", Font.ITALIC, 14));
+        streamLabel.setFont(new Font("Segoe UI Symbol", Font.ITALIC, 14));
         streamLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
         resultsPanel.add(streamLabel);
         resultsPanel.add(Box.createVerticalStrut(5));
@@ -441,11 +469,11 @@ public class MusicSearchUI extends JFrame {
         
         JLabel titleLabel = new JLabel(song.getTitle());
         titleLabel.setForeground(TEXT_PRIMARY);
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        titleLabel.setFont(new Font("Segoe UI Symbol", Font.BOLD, 14));
         
         JLabel artistLabel = new JLabel(song.getArtist());
         artistLabel.setForeground(TEXT_SECONDARY);
-        artistLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        artistLabel.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 12));
         
         infoPanel.add(titleLabel);
         infoPanel.add(artistLabel);
@@ -491,11 +519,11 @@ public class MusicSearchUI extends JFrame {
         
         JLabel nameLabel = new JLabel(torrent.getName());
         nameLabel.setForeground(TEXT_PRIMARY);
-        nameLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        nameLabel.setFont(new Font("Segoe UI Symbol", Font.BOLD, 14));
         
         JLabel detailsLabel = new JLabel(String.format("Size: %s | Seeders: %d", torrent.getSize(), torrent.getSeeders()));
         detailsLabel.setForeground(TEXT_SECONDARY);
-        detailsLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        detailsLabel.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 12));
         
         infoPanel.add(nameLabel);
         infoPanel.add(detailsLabel);
@@ -530,7 +558,7 @@ public class MusicSearchUI extends JFrame {
         
         JLabel platformLabel = new JLabel("Search on " + platform);
         platformLabel.setForeground(TEXT_PRIMARY);
-        platformLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        platformLabel.setFont(new Font("Segoe UI Symbol", Font.BOLD, 14));
         
         JButton openBtn = new JButton("Open →");
         styleActionButton(openBtn);
@@ -551,7 +579,7 @@ public class MusicSearchUI extends JFrame {
     private void styleActionButton(JButton btn) {
         btn.setForeground(TEXT_PRIMARY);
         btn.setBackground(ACCENT_GREEN);
-        btn.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        btn.setFont(new Font("Segoe UI Symbol", Font.BOLD, 12));
         btn.setBorderPainted(false);
         btn.setFocusPainted(false);
         btn.setPreferredSize(new Dimension(80, 35));
@@ -586,7 +614,7 @@ public class MusicSearchUI extends JFrame {
         if (songs.isEmpty()) {
             JLabel emptyLabel = new JLabel("No songs in this genre yet");
             emptyLabel.setForeground(TEXT_SECONDARY);
-            emptyLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+            emptyLabel.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 16));
             emptyLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
             genrePanel.add(emptyLabel);
         } else {
@@ -620,7 +648,7 @@ public class MusicSearchUI extends JFrame {
         for (Song song : currentQueue) {
             JLabel queueItem = new JLabel(song.getTitle());
             queueItem.setForeground(TEXT_SECONDARY);
-            queueItem.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+            queueItem.setFont(new Font("Segoe UI Symbol", Font.PLAIN, 13));
             queueItem.setAlignmentX(Component.LEFT_ALIGNMENT);
             queuePanel.add(queueItem);
             queuePanel.add(Box.createVerticalStrut(10));
