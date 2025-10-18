@@ -1,81 +1,80 @@
 package MusicSearchEngine;
-
 public class DownloadItem {
     private int id;
-    private String title;
-    private String artist;
-    private String genre;
+    private String songName;
+    private String torrentName;
     private String status;
-    private String torrentSource;
-
-    public DownloadItem(int id, String title, String artist, String genre, String status, String torrentSource) {
+    private String size;
+    private int seeders;
+    private int progress; // 0-100
+    
+    public DownloadItem(int id, String songName, String torrentName, String status, String size, int seeders) {
         this.id = id;
-        this.title = title;
-        this.artist = artist;
-        this.genre = genre;
+        this.songName = songName;
+        this.torrentName = torrentName;
         this.status = status;
-        this.torrentSource = torrentSource;
+        this.size = size;
+        this.seeders = seeders;
+        this.progress = 0;
     }
-
+    
     // Getters
     public int getId() {
         return id;
     }
-
-    public String getTitle() {
-        return title;
+    
+    public String getSongName() {
+        return songName;
     }
-
-    public String getArtist() {
-        return artist;
+    
+    public String getTorrentName() {
+        return torrentName;
     }
-
-    public String getGenre() {
-        return genre;
-    }
-
+    
     public String getStatus() {
         return status;
     }
-
-    public String getTorrentSource() {
-        return torrentSource;
+    
+    public String getSize() {
+        return size;
     }
-
+    
+    public int getSeeders() {
+        return seeders;
+    }
+    
+    public int getProgress() {
+        return progress;
+    }
+    
     // Setters
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setArtist(String artist) {
-        this.artist = artist;
-    }
-
-    public void setGenre(String genre) {
-        this.genre = genre;
-    }
-
     public void setStatus(String status) {
         this.status = status;
     }
-
-    public void setTorrentSource(String torrentSource) {
-        this.torrentSource = torrentSource;
+    
+    public void setProgress(int progress) {
+        this.progress = Math.min(100, Math.max(0, progress));
     }
-
+    
+    public String getStatusDisplay() {
+        switch (status) {
+            case "pending":
+                return "Pending";
+            case "downloading":
+                return "Downloading " + progress + "%";
+            case "completed":
+                return "Completed";
+            case "failed":
+                return "Failed";
+            case "paused":
+                return "Paused";
+            default:
+                return "Unknown";
+        }
+    }
+    
     @Override
     public String toString() {
-        return "DownloadItem{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", artist='" + artist + '\'' +
-                ", genre='" + genre + '\'' +
-                ", status='" + status + '\'' +
-                ", torrentSource='" + torrentSource + '\'' +
-                '}';
+        return String.format("%s [%s] - %s", songName, size, getStatusDisplay());
     }
 }
