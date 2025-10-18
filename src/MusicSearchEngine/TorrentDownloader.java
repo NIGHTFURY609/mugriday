@@ -5,6 +5,9 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import org.json.*;
+import java.awt.Desktop;
+import java.net.URI;
+
 
 public class TorrentDownloader {
     private DatabaseManager dbManager;

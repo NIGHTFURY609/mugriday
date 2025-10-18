@@ -137,39 +137,66 @@ public class MusicSearchUI extends JFrame {
     }
     
     private JPanel createSearchPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(BG_PRIMARY);
-        panel.setBorder(new EmptyBorder(20, 30, 20, 30));
-        
-        searchField = new JTextField("What do you want to play?");
-        searchField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        searchField.setForeground(TEXT_SECONDARY);
-        searchField.setBackground(new Color(33, 33, 33));
-        searchField.setCaretColor(TEXT_PRIMARY);
-        searchField.setBorder(new EmptyBorder(12, 40, 12, 15));
-        
-        searchField.addFocusListener(new FocusAdapter() {
-            public void focusGained(FocusEvent e) {
-                if (searchField.getText().equals("What do you want to play?")) {
-                    searchField.setText("");
-                    searchField.setForeground(TEXT_PRIMARY);
-                }
+    JPanel panel = new JPanel(new BorderLayout(15, 0)); // Added a gap between components
+    panel.setBackground(BG_PRIMARY);
+    panel.setBorder(new EmptyBorder(20, 30, 20, 30));
+
+    // --- START: New Home Button ---
+    JButton homeButton = new JButton("🏠 Home");
+    homeButton.setForeground(TEXT_SECONDARY);
+    homeButton.setBackground(BG_PRIMARY);
+    homeButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
+    homeButton.setBorder(new EmptyBorder(10, 15, 10, 15));
+    homeButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    homeButton.setFocusPainted(false);
+    homeButton.setContentAreaFilled(false);
+    homeButton.setOpaque(true);
+
+    // Action: Go back to the home screen
+    homeButton.addActionListener(e -> loadRecentActivity());
+
+    // Hover effect for the button
+    homeButton.addMouseListener(new MouseAdapter() {
+        public void mouseEntered(MouseEvent e) {
+            homeButton.setForeground(TEXT_PRIMARY);
+            homeButton.setBackground(BG_HOVER);
+        }
+        public void mouseExited(MouseEvent e) {
+            homeButton.setForeground(TEXT_SECONDARY);
+            homeButton.setBackground(BG_PRIMARY);
+        }
+    });
+    // --- END: New Home Button ---
+
+    searchField = new JTextField("What do you want to play?");
+    searchField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+    searchField.setForeground(TEXT_SECONDARY);
+    searchField.setBackground(new Color(33, 33, 33));
+    searchField.setCaretColor(TEXT_PRIMARY);
+    searchField.setBorder(new EmptyBorder(12, 40, 12, 15));
+
+    searchField.addFocusListener(new FocusAdapter() {
+        public void focusGained(FocusEvent e) {
+            if (searchField.getText().equals("What do you want to play?")) {
+                searchField.setText("");
+                searchField.setForeground(TEXT_PRIMARY);
             }
-            public void focusLost(FocusEvent e) {
-                if (searchField.getText().isEmpty()) {
-                    searchField.setText("What do you want to play?");
-                    searchField.setForeground(TEXT_SECONDARY);
-                }
+        }
+        public void focusLost(FocusEvent e) {
+            if (searchField.getText().isEmpty()) {
+                searchField.setText("What do you want to play?");
+                searchField.setForeground(TEXT_SECONDARY);
             }
-        });
-        
-        searchField.addActionListener(e -> performSearch());
-        
-        panel.add(searchField, BorderLayout.CENTER);
-        
-        return panel;
+        }
+    });
+
+    searchField.addActionListener(e -> performSearch());
+
+    panel.add(homeButton, BorderLayout.WEST); // Add button to the left
+    panel.add(searchField, BorderLayout.CENTER); // Keep search field in the center
+
+    return panel;
     }
-    
     private JPanel createQueuePanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
